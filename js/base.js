@@ -1,5 +1,8 @@
 var tasks=[];
 var tmpID = 0;
+var openID = 0;
+
+var modalNumOpen = -1;
 
 clearTaskLists(false);
 
@@ -12,13 +15,24 @@ function updateTime(){
 	//console.log("Tic toc");
 }
 
-//Actions
+//<<--------------------------------------------------------------------------------------->>//
+//												Actions
+//<<--------------------------------------------------------------------------------------->>//
 
+//Todo object clikc to open edit panel
 $(document).on('click', ".todoObj", function() {
-    //alert("Hello: " + $(this).attr('id'));    
-    updateStatus($(this).attr('id'));   
+    //alert("Hello: " + $(this).attr('id'));   
+   
+    var gettmpId = $(this).attr('id').split("_");
+	var getID = parseInt(gettmpId[1],10);
+	console.log("ID is:" + getID);
+
+	openID = tasks.findIndex(inst => inst.id==getID ); 
+	$('#editModal').modal('show');	
+    
 });
 
+//add new task
 $(document).on('click', "#showAddModal",function(){
 	console.log("showAddModal");
 
@@ -26,9 +40,21 @@ $(document).on('click', "#showAddModal",function(){
 	$('#setTaskName').focus();
 });
 
-//Add new tas
+$(document).on('click', "#setMoveNextStep",function(){
+	updateStatus();
+});
+
+//Add new task
 
 $("#addNewTask").click(function(){
+	addTask();
+});
+
+//<<--------------------------------------------------------------------------------------->>//
+//												Support functions
+//<<--------------------------------------------------------------------------------------->>//
+
+function addTask(){
 	var newTask = new Task(tmpID,$("#setTaskName").val(),$("#setProprty").val(),$("#setInfo").val(),1);
 	tmpID++;
 	tasks.push(newTask);
@@ -36,10 +62,7 @@ $("#addNewTask").click(function(){
 	$("#setTaskName").val('');
 	$("#setInfo").val('');
 	generateTodos(false);
-});
-
-
-//Support functions
+};
 
 function generateTodos(setDelete){
 
@@ -74,23 +97,38 @@ function clearTaskLists(setDelete){
 		$("#plannedTasksList").text("");
 		$("#workingTasksList").text("");
 		$("#doneTasksList").text("");
+	}else{
+		tasks = [];
+		$("#plannedTasksList").text("");
+		$("#workingTasksList").text("");
+		$("#doneTasksList").text("");
 	}
 }
 
 
-function updateStatus(id){
-	var gettmpId = id.split("_");
-	var getID = parseInt(gettmpId[1],10);
-	console.log("ID is:" + getID);
+function updateStatus(){ //Comes when click one object on main desk
 
-	var tmpIndex = tasks.findIndex(inst => inst.id==getID );
-	console.log(tmpIndex);
-	var tmpObj = tasks[tmpIndex];
-	tmpObj.status = tmpObj.status+1;
-	if(tmpObj.status>3){
-		tasks.splice(tmpIndex,1);
-	}else{
-		tasks[tmpIndex] = tmpObj;	
+	console.log(openID);
+	var tmpObj = tasks[openID];
+	
+
+	switch(tmpObj.status){
+		case 1:
+			tmpObj.status = tmpObj.status+1;
+			tasks[openID] = tmpObj;
+			
+			
+			break;
+		case 2:
+			tmpObj.status = tmpObj.status+1;
+			tasks[openID] = tmpObj;
+		
+				
+			break;
+		case 3:
+			tasks.splice(openID,1);
+			break;
+
 	}
 	
 	
@@ -98,13 +136,24 @@ function updateStatus(id){
 }
 
 
-//Prevent Enter to reloead
+//<<--------------------------------------------------------------------------------------->>//
+//												Keyboard handling
+//<<--------------------------------------------------------------------------------------->>//
 $(document).ready(function() {
   $(window).keydown(function(event){
   	switch(event.keyCode){
   		case 13:
   			event.preventDefault();
-      		return false;
+  			switch(modalNumOpen){
+  				case 1:
+  					addTask();
+  					break;
+
+  				default:
+  					$('#addNewTaskModal').modal('show');
+  					break;
+  			}
+      		
   			break;
 
   		case 'a':
@@ -115,4 +164,31 @@ $(document).ready(function() {
       
     }
   });
+});
+
+
+//<<--------------------------------------------------------------------------------------->>//
+//												Modal load/unload functions
+//<<--------------------------------------------------------------------------------------->>//
+//Modal events add new task
+$('#addNewTaskModal').on('shown.bs.modal', function (e) {
+ 	modalNumOpen = 1;
+ 	document.getElementById("setTaskName").focus();
+
+});
+$('#addNewTaskModal').on('hidden.bs.modal', function (e) {
+ 	modalNumOpen = -1;
+});
+
+//Modal events Edit  task
+$('#editModal').on('show.bs.modal', function (e) {
+ 	$("#setTaskLabelModal").text(tasks[openID].name);
+ 	$("#editTaskName").val(tasks[openID].name);
+ 	$("#editPriorty").val(tasks[openID].TaskText);
+});
+$('#editModal').on('shown.bs.modal', function (e) {
+ 	modalNumOpen = 2;
+});
+$('#editModal').on('hidden.bs.modal', function (e) {
+ 	modalNumOpen = -2;
 });

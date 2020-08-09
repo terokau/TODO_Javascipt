@@ -6,7 +6,7 @@ class Task{
 		this.id = id;
 		this.name = name;
 		this.priority = parseInt(priority,10);
-		this.info = info;
+		this.info.push(info);
 		this.status = parseInt(status,10);
 
 
@@ -20,7 +20,18 @@ class Task{
 		return this.GenerateTask();
 	}
 
+	get TaskText(){
+		return this.GenerateTextPriority();
+	}
+
+
+
 	//Start of internal methos
+
+	addInfo(text){
+		this.info.push(text);
+
+	}
 
 	GenerateTask(){
 		return  '<li class="list-group-item '+this.GenerateColorClass()+' todoObj" id="todo_'+this.id+'"><span>['+this.GenerateTextPriority()+']</span> - '+this.name+'</li>';
