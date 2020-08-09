@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>TKauria Todo - Today</title>
+		<link rel="stylesheet" href="css/bootstrap/bootstrap.css">
+		<link rel="stylesheet" href="css/custom.css">
+	</head>
+	<body>
+		<div class="container-fluid" id="main">
+			<div class="container-fluid" id="header">
+				<div class="jumbotron">
+					<h1 class="display-3"><span class="red">Todo</span> - <span class="green">Today</span></h1>
+					<p class="lead" id="setTime">//TODO: set here date and time.</p>
+				</div>
+			</div> <!-- End of Header -->
+
+			<div id="app" class="container-fluid">
+				<div class="row">
+					<div class="col">
+						<div class="card" id="plannedTasks">
+								<div class="card-header">
+								<h1 class="display-4 red justify-content-center">Not yet
+								<!-- Button trigger modal -->
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+									Add
+								</button>
+								</h1>
+							</div>
+							<ul class="list-group list-group-flush" id="plannedTasksList">
+								<li class="list-group-item highPriority todoObj" id="todo_001"><span>[High]</span> - Cras justo odio</li>
+								<li class="list-group-item normalPriority todoObj" id="todo_003"><span>[Normal]</span> - Dapibus ac facilisis in</li>
+								<li class="list-group-item lowPriority todoObj" id="todo_002"><span>[Low]</span> - Vestibulum at eros</li>
+							</ul>
+						</div>
+
+
+					</div>
+
+					<div class="col">
+						<div class="card" id="workingTasks">
+							<div class="card-header">
+								<h1 class="display-4 orange">Keep on working</h1>
+							</div>
+							<ul class="list-group list-group-flush" id="workingTasksList">
+								<li class="list-group-item">Cras justo odio</li>
+								<li class="list-group-item">Dapibus ac facilisis in</li>
+								<li class="list-group-item">Vestibulum at eros</li>
+							</ul>
+						</div>
+						
+					</div>
+
+					<div class="col">
+
+						<div class="card" id="doneTasks">
+							<div class="card-header">
+								<h1 class="display-4 green">Party List</h1>
+							</div>
+							<ul class="list-group list-group-flush" id="doneTasksList">
+								<li class="list-group-item">Cras justo odio</li>
+								<li class="list-group-item">Dapibus ac facilisis in</li>
+								<li class="list-group-item">Vestibulum at eros</li>
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+		</div> <!-- End of Maind -->
+
+	</body>
+
+	<!-- Modal -->
+	<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Add new task</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="setTaskName">Task name:</label>
+							<input type="text" name="setTaskName" id="setTaskName" class="form-control">
+						</div>
+
+						<div class="form-group">
+							<label for="setPriorty">Priority</label>
+							<select class="form-control" id="setProprty">
+								<option value="3">High</option>
+								<option value="2" selected>Normal</option>
+								<option value="1">Low</option>
+							</select>
+						</div>
+
+						<div class="form-group">
+							<label for="setText">More infos?</label>
+							<textarea id="setInfo" class="form-control rows="3"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<blockquote class="blockquote text-center">
+						Here by I promise to do this task that I assigned it to my self. If i eat my words, Troll may take me.
+					</blockquote>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="clearAddNewTask">Trun around and walk back</button>
+					<button type="button" class="btn btn-primary" id="addNewTask">Understood</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Script -->
+
+	<!-- Classes-->
+	<script type="text/javascript" src="js/usr/taskClass.js"></script>
+	<!-- Collections -->
+	<script type="text/javascript" src="js/r/jquery.js"></script>
+	<script type="text/javascript" src="js/r/popper.js"></script>
+	<script type="text/javascript" src="js/r/moment.js"></script>
+	<script type="text/javascript" src="js/r/bootstrap.js"></script>
+	<script type="text/javascript" src="js/base.js"></script>
+
+</html>

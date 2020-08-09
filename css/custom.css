@@ -1,0 +1,24 @@
+.green{
+	color: #32a643;
+}
+
+.red{
+	color: #e01044;
+}
+
+.orange{
+	color: #ff7b00;
+}
+
+.highPriority{
+	color:white;
+	background-color: #e01044;
+}
+.normalPriority{
+	color:white;
+	background-color: #52a4e3;
+}
+.lowPriority{
+	color:black;
+	background-color: #b3f5c3;
+}
