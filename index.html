@@ -10,7 +10,7 @@
 			<div class="container-fluid" id="header">
 				<div class="jumbotron">
 					<h1 class="display-3"><span class="red">Todo</span> - <span class="green">Today</span></h1>
-					<p class="lead" id="setTime">//TODO: set here date and time.</p>
+					<p class="lead" id="setTime"></p>
 				</div>
 			</div> <!-- End of Header -->
 
@@ -21,15 +21,13 @@
 								<div class="card-header">
 								<h1 class="display-4 red justify-content-center">Not yet
 								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">
+								<button type="button" class="btn btn-primary" id="showAddModal">
 									Add
 								</button>
 								</h1>
 							</div>
 							<ul class="list-group list-group-flush" id="plannedTasksList">
-								<li class="list-group-item highPriority todoObj" id="todo_001"><span>[High]</span> - Cras justo odio</li>
-								<li class="list-group-item normalPriority todoObj" id="todo_003"><span>[Normal]</span> - Dapibus ac facilisis in</li>
-								<li class="list-group-item lowPriority todoObj" id="todo_002"><span>[Low]</span> - Vestibulum at eros</li>
+								
 							</ul>
 						</div>
 
@@ -42,9 +40,7 @@
 								<h1 class="display-4 orange">Keep on working</h1>
 							</div>
 							<ul class="list-group list-group-flush" id="workingTasksList">
-								<li class="list-group-item">Cras justo odio</li>
-								<li class="list-group-item">Dapibus ac facilisis in</li>
-								<li class="list-group-item">Vestibulum at eros</li>
+								
 							</ul>
 						</div>
 						
@@ -57,9 +53,7 @@
 								<h1 class="display-4 green">Party List</h1>
 							</div>
 							<ul class="list-group list-group-flush" id="doneTasksList">
-								<li class="list-group-item">Cras justo odio</li>
-								<li class="list-group-item">Dapibus ac facilisis in</li>
-								<li class="list-group-item">Vestibulum at eros</li>
+								
 							</ul>
 						</div>
 						
@@ -72,7 +66,7 @@
 	</body>
 
 	<!-- Modal -->
-	<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal fade" id="addNewTaskModal"  data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">

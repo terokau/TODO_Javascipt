@@ -12,9 +12,18 @@ function updateTime(){
 	//console.log("Tic toc");
 }
 
+//Actions
+
 $(document).on('click', ".todoObj", function() {
     //alert("Hello: " + $(this).attr('id'));    
     updateStatus($(this).attr('id'));   
+});
+
+$(document).on('click', "#showAddModal",function(){
+	console.log("showAddModal");
+
+	$('#addNewTaskModal').modal('show');
+	$('#setTaskName').focus();
 });
 
 //Add new tas
@@ -23,14 +32,18 @@ $("#addNewTask").click(function(){
 	var newTask = new Task(tmpID,$("#setTaskName").val(),$("#setProprty").val(),$("#setInfo").val(),1);
 	tmpID++;
 	tasks.push(newTask);
-	clearTaskLists(false);
-	generateTodos();
+	$('#addNewTaskModal').modal('hide');
+	$("#setTaskName").val('');
+	$("#setInfo").val('');
+	generateTodos(false);
 });
 
 
 //Support functions
 
-function generateTodos(){
+function generateTodos(setDelete){
+
+	clearTaskLists(setDelete);
 	
 	tasks.forEach(element=>{
 		//console.log(element.name);
@@ -80,6 +93,26 @@ function updateStatus(id){
 		tasks[tmpIndex] = tmpObj;	
 	}
 	
-	clearTaskLists(false);
-	generateTodos();
+	
+	generateTodos(false);
 }
+
+
+//Prevent Enter to reloead
+$(document).ready(function() {
+  $(window).keydown(function(event){
+  	switch(event.keyCode){
+  		case 13:
+  			event.preventDefault();
+      		return false;
+  			break;
+
+  		case 'a':
+  			$('#addNewTaskModal').modal('show');
+  			break;
+  	}
+    if(event.keyCode == 13) {
+      
+    }
+  });
+});
