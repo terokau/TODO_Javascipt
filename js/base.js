@@ -1,17 +1,18 @@
-var tasks=[];
-var tmpID = 0;
-var openID = 0;
+let tasks=[];
+let tmpID = 0;
+let openID = 0;
+let lastSave = ""
 
-var modalNumOpen = -1;
+let modalNumOpen = -1;
 
 clearTaskLists(false);
 
 //Time
-var secondTimer = setInterval(updateTime,1000);
+let secondTimer = setInterval(updateTime,1000);
 updateTime(); //To set in on load
 function updateTime(){
-	var timeStr = moment().format('MMMM Do YYYY, HH:mm:ss');
-	$("#setTime").text(timeStr);
+	let timeStr = moment().format('MMMM Do YYYY, HH:mm:ss');
+	$("#setTime").html("Current time: " +timeStr + " <br>Last time saved: " + lastSave);
 	//console.log("Tic toc");
 }
 
@@ -23,8 +24,8 @@ function updateTime(){
 $(document).on('click', ".todoObj", function() {
     //alert("Hello: " + $(this).attr('id'));   
    
-    var gettmpId = $(this).attr('id').split("_");
-	var getID = parseInt(gettmpId[1],10);
+    let gettmpId = $(this).attr('id').split("_");
+	let getID = parseInt(gettmpId[1],10);
 	console.log("ID is:" + getID);
 
 	openID = tasks.findIndex(inst => inst.id==getID ); 
@@ -38,6 +39,10 @@ $(document).on('click', "#showAddModal",function(){
 
 	$('#addNewTaskModal').modal('show');
 	$('#setTaskName').focus();
+});
+
+$(document).on('click', "#saveComment",function(){
+	addComment();
 });
 
 $(document).on('click', "#setMoveNextStep",function(){
@@ -55,18 +60,54 @@ $("#addNewTask").click(function(){
 //<<--------------------------------------------------------------------------------------->>//
 
 function addTask(){
-	var newTask = new Task(tmpID,$("#setTaskName").val(),$("#setProprty").val(),$("#setInfo").val(),1);
+	let newTask = new Task(tmpID,$("#setTaskName").val(),$("#setProprty").val(),$("#setInfo").val(),1);
 	tmpID++;
 	tasks.push(newTask);
 	$('#addNewTaskModal').modal('hide');
-	$("#setTaskName").val('');
-	$("#setInfo").val('');
+	saveValues();
 	generateTodos(false);
 };
 
+function addComment(){
+	tasks[openID].addInfo($("#addCommentBox").val());
+	$('#editModal').modal('hide');
+	saveValues();
+}
+
+function updateStatus(){ //Comes when click one object on main desk
+
+	console.log(openID);
+	let tmpObj = tasks[openID];
+	
+
+	switch(tmpObj.status){
+		case 1:
+			tmpObj.status = tmpObj.status+1;
+			tasks[openID] = tmpObj;
+			
+			
+			break;
+		case 2:
+			tmpObj.status = tmpObj.status+1;
+			tasks[openID] = tmpObj;
+		
+				
+			break;
+		case 3:
+			tasks.splice(openID,1);
+			break;
+
+	}
+	
+	$('#editModal').modal('hide');
+	saveValues();
+	generateTodos(false);
+}
+
+
 function generateTodos(setDelete){
 
-	clearTaskLists(setDelete);
+	clearTaskLists(setDelete);//maybe not smartest way to do
 	
 	tasks.forEach(element=>{
 		//console.log(element.name);
@@ -106,36 +147,6 @@ function clearTaskLists(setDelete){
 }
 
 
-function updateStatus(){ //Comes when click one object on main desk
-
-	console.log(openID);
-	var tmpObj = tasks[openID];
-	
-
-	switch(tmpObj.status){
-		case 1:
-			tmpObj.status = tmpObj.status+1;
-			tasks[openID] = tmpObj;
-			
-			
-			break;
-		case 2:
-			tmpObj.status = tmpObj.status+1;
-			tasks[openID] = tmpObj;
-		
-				
-			break;
-		case 3:
-			tasks.splice(openID,1);
-			break;
-
-	}
-	
-	
-	generateTodos(false);
-}
-
-
 //<<--------------------------------------------------------------------------------------->>//
 //												Keyboard handling
 //<<--------------------------------------------------------------------------------------->>//
@@ -148,6 +159,11 @@ $(document).ready(function() {
   				case 1:
   					addTask();
   					break;
+
+  				case 2:
+  					addComment();
+  					break;
+
 
   				default:
   					$('#addNewTaskModal').modal('show');
@@ -166,11 +182,42 @@ $(document).ready(function() {
   });
 });
 
+//<<--------------------------------------------------------------------------------------->>//
+//												Save and load storage
+//<<--------------------------------------------------------------------------------------->>//
+
+function loadValues(){
+	if(localStorage.length>0){
+		let tmptasks = JSON.parse(localStorage.getItem('tasks') );
+		tmptasks.forEach(element =>{
+			let newTask = new Task(element.id,element.name,element.priority,'',element.status);
+			element.info.forEach(inst =>{
+				newTask.addInfo(inst);
+			})
+			tasks.push(newTask);
+		})
+		//console.log(tasks);
+		tmpID		=	localStorage.getItem('id');
+		lastSave 	= 	localStorage.getItem('last');
+	}
+	
+}
+
+function saveValues(){
+	localStorage.setItem('last',moment().format('MMMM Do YYYY, HH:mm:ss'))
+	localStorage.setItem('id',tmpID);
+	localStorage.setItem('tasks',JSON.stringify(tasks));
+}
+
 
 //<<--------------------------------------------------------------------------------------->>//
 //												Modal load/unload functions
 //<<--------------------------------------------------------------------------------------->>//
 //Modal events add new task
+$('#addNewTaskModal').on('show.bs.modal', function (e) {
+	$("#setTaskName").val('');
+	$("#setInfo").val('');
+});
 $('#addNewTaskModal').on('shown.bs.modal', function (e) {
  	modalNumOpen = 1;
  	document.getElementById("setTaskName").focus();
@@ -185,10 +232,24 @@ $('#editModal').on('show.bs.modal', function (e) {
  	$("#setTaskLabelModal").text(tasks[openID].name);
  	$("#editTaskName").val(tasks[openID].name);
  	$("#editPriorty").val(tasks[openID].TaskText);
+ 	$("#addCommentBox").val('');
+ 	$("#Comments").html(tasks[openID].getInfoCards());
+
 });
 $('#editModal').on('shown.bs.modal', function (e) {
+	document.getElementById("addCommentBox").focus();
  	modalNumOpen = 2;
 });
 $('#editModal').on('hidden.bs.modal', function (e) {
  	modalNumOpen = -2;
 });
+
+//<<--------------------------------------------------------------------------------------->>//
+//												Page load
+//<<--------------------------------------------------------------------------------------->>//
+
+window.onload = (event) => {
+	loadValues();
+	generateTodos(false);
+  	console.log('page is fully loaded');
+};

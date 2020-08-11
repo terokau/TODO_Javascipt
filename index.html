@@ -93,7 +93,7 @@
 
 						<div class="form-group">
 							<label for="setText">More infos?</label>
-							<textarea id="setInfo" class="form-control rows="3"></textarea>
+							<textarea id="setInfo" class="form-control "rows="3"></textarea>
 						</div>
 					</form>
 				</div>
@@ -101,7 +101,7 @@
 					<blockquote class="blockquote text-center">
 						Here by I promise to do this task that I assigned it to my self. If i eat my words, Troll may take me.
 					</blockquote>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="clearAddNewTask">Trun around and walk back</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="clearAddNewTask">Turn around and walk back</button>
 					<button type="button" class="btn btn-primary" id="addNewTask">Understood</button>
 				</div>
 			</div>
@@ -119,21 +119,48 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form>
-						<div class="form-group">
-							<label for="editTaskName">Task name:</label>
-							<input type="text" class="form-control" name="editTaskName" id="editTaskName" disabled>
+					<div class="row">
+						<div class="col">
+							<form>
+								<div class="form-group">
+									<label for="editTaskName">Task name:</label>
+									<input type="text" class="form-control" name="editTaskName" id="editTaskName" disabled>
+								</div>
+								<div class="form-group">
+									<label for="editPriorty">Priority</label>
+									<input type="text" class="form-control" name="editPriorty" id="editPriorty" disabled>
+								</div>
+
+								<div class="form-group">
+									<label>Add comment</label>
+									<textarea class="form-control" id="addCommentBox" rows="3"></textarea>
+								</div>
+								
+							</form>
 						</div>
-						<div class="form-group">
-							<label for="editPriorty">Priority</label>
-							<input type="text" class="form-control" name="editPriorty" id="editPriorty" disabled>
+					</div>
+
+					<div class="container" id="Comments">
+						<div class="row">
+							<div class="card w-100">
+								<div class="card-body">
+									Some comment
+								</div>
+							</div>
 						</div>
-						
-					</form>
+						<div class="row ">
+							<div class="card w-100">
+								<div class="card-body">
+									Some comment
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save</button>
+					<button type="button" class="btn btn-primary" id="saveComment">Save</button>
 					<button type="button" class="btn btn-primary" id="setMoveNextStep">Move to next step</button>
 				</div>
 			</div>

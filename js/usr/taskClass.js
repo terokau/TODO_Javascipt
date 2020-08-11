@@ -1,12 +1,12 @@
 class Task{
 
-
+	info =[];
 
 	constructor(id,name,priority,info,status){
 		this.id = id;
 		this.name = name;
 		this.priority = parseInt(priority,10);
-		this.info.push(info);
+		this.addInfo(info);
 		this.status = parseInt(status,10);
 
 
@@ -29,8 +29,20 @@ class Task{
 	//Start of internal methos
 
 	addInfo(text){
-		this.info.push(text);
+		if(text.length>2){
+			this.info.push(text + " - ["+moment().format('MMMM Do YYYY, HH:mm:ss')+"]");
+		}
+		
 
+	}
+
+	getInfoCards(){ //Comments of tasks
+		let emptyTxt = "";
+		this.info.forEach(element =>{
+			emptyTxt = emptyTxt + '<div class="row"><div class="card w-100"><div class="card-body">'+element+'</div></div></div>';
+		});
+
+		return emptyTxt;
 	}
 
 	GenerateTask(){
@@ -57,7 +69,7 @@ class Task{
 
 	GenerateTextPriority(){
 		
-		var tmpTxt = "";
+		let tmpTxt = "";
 		switch(this.priority){
 
 			case 1:
