@@ -69,7 +69,7 @@ function addTask(){
 };
 
 function addComment(){
-	tasks[openID].addInfo($("#addCommentBox").val());
+	tasks[openID].addInfo($("#addCommentBox").val(),false);
 	$('#editModal').modal('hide');
 	saveValues();
 }
@@ -192,7 +192,7 @@ function loadValues(){
 		tmptasks.forEach(element =>{
 			let newTask = new Task(element.id,element.name,element.priority,'',element.status);
 			element.info.forEach(inst =>{
-				newTask.addInfo(inst);
+				newTask.addInfo(inst,false);
 			})
 			tasks.push(newTask);
 		})

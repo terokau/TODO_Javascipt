@@ -28,7 +28,7 @@ class Task{
 
 	//Start of internal methos
 
-	addInfo(text){
+	addInfo(text, setAddTimeStamp){
 		if(text.length>2){
 			this.info.push(text + " - ["+moment().format('MMMM Do YYYY, HH:mm:ss')+"]");
 		}
