@@ -113,10 +113,15 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="setTaskLabelModal">Modal title</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-					</button>
+					<div class="col-9">
+						<h5 class="modal-title" id="setTaskLabelModal">Modal title</h5>
+					</div>
+					<div class="col-3">
+						<a href="#"id="enableEdit">edit</a>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -128,7 +133,12 @@
 								</div>
 								<div class="form-group">
 									<label for="editPriorty">Priority</label>
-									<input type="text" class="form-control" name="editPriorty" id="editPriorty" disabled>
+							
+									<select class="form-control" id="editPriorty" disabled>
+										<option value="3" id="editPriorty3">High</option>
+										<option value="2" id="editPriorty2" selected>Normal</option>
+										<option value="1" id="editPriorty1">Low</option>
+									</select>
 								</div>
 
 								<div class="form-group">
@@ -172,6 +182,8 @@
 
 	<!-- Classes-->
 	<script type="text/javascript" src="js/usr/taskClass.js"></script>
+	<!-- Database --> 
+	<script type="text/javascript" src="js/usr/db.js"></script>
 	<!-- Collections -->
 	<script type="text/javascript" src="js/r/jquery.js"></script>
 	<script type="text/javascript" src="js/r/popper.js"></script>

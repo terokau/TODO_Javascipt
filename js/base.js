@@ -49,10 +49,23 @@ $(document).on('click', "#setMoveNextStep",function(){
 	updateStatus();
 });
 
+$(document).on('click', "#enableEdit",function(){
+	$('#editTaskName').prop('disabled',false);
+	$('#editPriorty').prop('disabled',false);
+	$('#enableEdit').text('edit');
+});
+
 //Add new task
 
 $("#addNewTask").click(function(){
 	addTask();
+});
+
+//Focus out of validation object
+$('#setTaskName').focusout(function(){
+	if(($('#setTaskName').val.length)<2){
+		console.log("less than 2 length");
+	}
 });
 
 //<<--------------------------------------------------------------------------------------->>//
@@ -68,8 +81,10 @@ function addTask(){
 	generateTodos(false);
 };
 
-function addComment(){
-	tasks[openID].addInfo($("#addCommentBox").val(),false);
+function addComment(){ //Also change name/priority if modified
+	tasks[openID].addInfo($("#addCommentBox").val(),true);
+	tasks[openID].setName = $("#editTaskName").val();
+	tasks[openID].setPriority = $("#editPriorty").val();
 	$('#editModal').modal('hide');
 	saveValues();
 }
@@ -105,6 +120,7 @@ function updateStatus(){ //Comes when click one object on main desk
 }
 
 
+//Maybe should be in class==!?
 function generateTodos(setDelete){
 
 	clearTaskLists(setDelete);//maybe not smartest way to do
@@ -152,8 +168,8 @@ function clearTaskLists(setDelete){
 //<<--------------------------------------------------------------------------------------->>//
 $(document).ready(function() {
   $(window).keydown(function(event){
-  	switch(event.keyCode){
-  		case 13:
+  	switch(event.key){
+  		case 'Enter':
   			event.preventDefault();
   			switch(modalNumOpen){
   				case 1:
@@ -172,8 +188,13 @@ $(document).ready(function() {
       		
   			break;
 
-  		case 'a':
-  			$('#addNewTaskModal').modal('show');
+  		case 'r':
+  			/*
+  			if(openID>0){
+  				openID = openID*-1;
+  				$('#editModal').modal('show');
+  			}
+  			*/
   			break;
   	}
     if(event.keyCode == 13) {
@@ -229,11 +250,30 @@ $('#addNewTaskModal').on('hidden.bs.modal', function (e) {
 
 //Modal events Edit  task
 $('#editModal').on('show.bs.modal', function (e) {
+	$('#editTaskName').prop('disabled',true);
+	$('#editPriorty').prop('disabled',true);
  	$("#setTaskLabelModal").text(tasks[openID].name);
  	$("#editTaskName").val(tasks[openID].name);
- 	$("#editPriorty").val(tasks[openID].TaskText);
+ 	//$("#editPriorty").val(tasks[openID].TaskText);
+ 	switch(tasks[openID].getPriority){
+ 		case 3:
+ 			$('#editPriorty3').prop('selected',true)
+ 			$('#editPriorty2').prop('selected',false)
+ 			$('#editPriorty1').prop('selected',false)
+ 			break;
+ 		case 2:
+ 			$('#editPriorty3').prop('selected',false)
+ 			$('#editPriorty2').prop('selected',true)
+ 			$('#editPriorty1').prop('selected',false)
+ 			break;
+ 		case 1:
+ 			$('#editPriorty3').prop('selected',false)
+ 			$('#editPriorty2').prop('selected',false)
+ 			$('#editPriorty1').prop('selected',true)
+ 			break;
+ 	}
  	$("#addCommentBox").val('');
- 	$("#Comments").html(tasks[openID].getInfoCards());
+ 	$("#Comments").html(tasks[openID].GenerateInfoCards());
 
 });
 $('#editModal').on('shown.bs.modal', function (e) {
@@ -241,6 +281,9 @@ $('#editModal').on('shown.bs.modal', function (e) {
  	modalNumOpen = 2;
 });
 $('#editModal').on('hidden.bs.modal', function (e) {
+	generateTodos(false);
+	$('#editTaskName').prop('disabled',true);
+	$('#editPriorty').prop('disabled',true);
  	modalNumOpen = -2;
 });
 
