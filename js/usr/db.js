@@ -1,26 +1,54 @@
 const getDBName = "TodoDB";
-const getDBVersion = 3;
+const getDBVersion = 4;
+var db;
+let setColumns= {name: 'id',unique: false};
+let openTime = moment().format('MMMM Do YYYY, HH:mm:ss');
 
 console.log("Start of DB");
-// In the following line, you should include the prefixes of implementations you want to test.
-window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-// DON'T use "var indexedDB = ..." if you're not in a function.
-// Moreover, you may need references to some window.IDB* objects:
-window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
-window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-// (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
 
-if (!window.indexedDB) {
-    console.log("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
-}else{
-	var request = window.indexedDB.open(getDBName, getDBVersion);
+const customerData = [
+  { name: "Bill", status: 1, priority: 1,setTime:openTime ,startTime:openTime, deadline: openTime},
+  { name: "Jaska", status: 1, priority: 1,setTime:openTime ,startTime:openTime, deadline: openTime},
+];
+
+function openDb(){
+	var req = indexedDB.open(getDBName,getDBVersion);
+	req.onsuccess = function(event){
+		db = this.result;
+		console.log("Open ok");
+	}
+	req.onerror = function(event){
+		console.log(event.target.errorCode);
+	}
+	
+	req.onupgradeneeded = function (event) {
+
+	    var db = event.target.result;
+	
+	    // Create another object store called "names" with the autoIncrement flag set as true.    
+	    var objStoreTasks = db.createObjectStore("Tasks", { autoIncrement : true });
+	    objStoreTasks.createIndex('name','name',{unique: false});
+	    objStoreTasks.createIndex('status','status',{unique: false});
+		objStoreTasks.createIndex('priority','priority',{unique: false});
+		objStoreTasks.createIndex('setTime','setTime',{unique: false});
+		objStoreTasks.createIndex('startTime','StartTime',{unique: false});
+		objStoreTasks.createIndex('deadline','deadline',{unique: false});
+		
+		objStoreTasks.transaction.oncomplete = function(event){
+			var tst = db.transaction('Tasks','readwrite').objectStore('Tasks');
+			customerData.forEach(element =>{
+				console.log(element);
+				tst.add(element);
+			});
+		}
+		
+		var objStoreComments = db.createObjectStore("Comments", { autoincrement : true });
+	    objStoreComments.createIndex('id','id',{unique: false});
+	    objStoreComments.createIndex('text','text',{unique: false});
+		objStoreComments.createIndex('setTime','setTime',{unique: false});
+		
+
+		
+    };
 }
 
-request.onerror = function(event) {
-  // Do something with request.errorCode!
-};
-request.onsuccess = function(event) {
-	console.log("Open " + getDBName +" Ok.")
-  // Do something with request.result!
-  var db = event.result;
-};
