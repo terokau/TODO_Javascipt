@@ -1,20 +1,31 @@
 class Task{
 
-	info =[];
+	id;
+	name;
+	status;
+	priority;
+	setTime;
+	startTime;
+	deadline;
+	
 
-	constructor(id,name,priority,info,status){
+	constructor(id,name,priority,status,setTime,startTime,deadline){
 		this.id = id;
 		this.setName = name;
-		this.setPriority = parseInt(priority,10);
-		this.addInfo(info);
-		this.setStatus = parseInt(status,10);
+		this.priority = parseInt(priority,10);
+		this.status = parseInt(status,10);
+		this.setTime = setTime;
+		this.startTime = startTime;
+		this.deadline = deadline;
 
 
 		//console.log("New Task, " + this.name + " " + this.priority + " " +this.info);
 
 	}
 
-	//Getters
+//<<--------------------------------------------------------------------------------------->>//
+//												Getters
+//<<--------------------------------------------------------------------------------------->>//
 
 	get TaskObject(){
 		return this.GenerateTask();
@@ -28,55 +39,52 @@ class Task{
 		return this.priority;
 	}
 
-	//Setters
-
+//<<--------------------------------------------------------------------------------------->>//
+//												Setters
+//<<--------------------------------------------------------------------------------------->>//
 	set setName(setNewName){
 		this.name = setNewName;
 	}
 
-	set setPriority(setNewPriority){
+	set setPriorty(setNewPriority){
 		this.priority = parseInt(setNewPriority,10);
 	}
 
 	set setStatus(setNewStatus){
 		this.status = parseInt(setNewStatus,10);
 	}
+	
+	set setTime(setNewSetTime){
+		this.setTime = setNewsetTime;
+	}
+	
+	set startTime(setNewStartTime){
+		this.setNewStartTime;
+	}
+	
+	set deadline(setNewDeadLine){
+		this.deadline = setNewDeadLine;
+	}
+//<<--------------------------------------------------------------------------------------->>//
+//												functions
+//<<--------------------------------------------------------------------------------------->>//
 
-
-
-	//Start of internal methos
-
-	addInfo(text, setAddTimeStamp){
-
-		if(text.length>2){
-			if(setAddTimeStamp){
-				this.info.push(text + " - ["+moment().format('MMMM Do YYYY, HH:mm:ss')+"]");
-			}else{
-				this.info.push(text);
-			}
-			
-		}
-		
-
+	updateSetTime(){
+		this.setTime = moment().format('MMMM Do YYYY, HH:mm:ss');
 	}
 
 //<<--------------------------------------------------------------------------------------->>//
 //												Generate HTML
 //<<--------------------------------------------------------------------------------------->>//
-	GenerateInfoCards(){ //Comments of tasks
-		let emptyTxt = "";
-		this.info.forEach(element =>{
-			emptyTxt = emptyTxt + '<div class="row"><div class="card w-100"><div class="card-body">'+element+'</div></div></div>';
-		});
-
-		return emptyTxt;
-	}
-
 	
 	GenerateTask(){
 		return  '<li class="list-group-item '+this.GenerateColorClass()+' todoObj" id="todo_'+this.id+'"><span>['+this.GenerateTextPriority()+']</span> - '+this.name+'</li>';
 	}
 
+
+//<<--------------------------------------------------------------------------------------->>//
+//												Text/Colors from numbers
+//<<--------------------------------------------------------------------------------------->>//
 	GenerateColorClass(){
 		switch(this.priority){
 

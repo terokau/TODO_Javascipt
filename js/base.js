@@ -1,5 +1,4 @@
-let tasks=[];
-let tmpID = 0;
+let tasks;
 let openID = 0;
 let lastSave = ""
 
@@ -63,9 +62,7 @@ $("#addNewTask").click(function(){
 
 //Focus out of validation object
 $('#setTaskName').focusout(function(){
-	if(($('#setTaskName').val.length)<2){
-		console.log("less than 2 length");
-	}
+	
 });
 
 //<<--------------------------------------------------------------------------------------->>//
@@ -73,23 +70,31 @@ $('#setTaskName').focusout(function(){
 //<<--------------------------------------------------------------------------------------->>//
 
 function addTask(){
-	let newTask = new Task(tmpID,$("#setTaskName").val(),$("#setProprty").val(),$("#setInfo").val(),1);
-	tmpID++;
-	tasks.push(newTask);
+	
+	let newTask = new Task(null,$("#setTaskName").val(),$("#setPriority").val(),1,null,'noStartTime','noDeadline');
+	let newComment = new Comment(0,0,$('#setInfo').val(),'');
+	
+	newTask.updateSetTime();
+	newComment.updateCreateTime();
+	addDBTask(newTask,newComment);
+	
 	$('#addNewTaskModal').modal('hide');
-	saveValues();
-	generateTodos(false);
+	
+	
 };
 
 function addComment(){ //Also change name/priority if modified
-	tasks[openID].addInfo($("#addCommentBox").val(),true);
+	let newComment = new Comment(0,tasks[openID].id,$("#addCommentBox").val(),'');
+	newComment.updateCreateTime();
+	addDBComment(newComment);
+	
 	tasks[openID].setName = $("#editTaskName").val();
 	tasks[openID].setPriority = $("#editPriorty").val();
 	$('#editModal').modal('hide');
-	saveValues();
+	
 }
 
-function updateStatus(){ //Comes when click one object on main desk
+function updateStatus(){ //Comes when click one object on main desk //TODO: change to use indexedDB
 
 	console.log(openID);
 	let tmpObj = tasks[openID];
@@ -120,46 +125,12 @@ function updateStatus(){ //Comes when click one object on main desk
 }
 
 
-//Maybe should be in class==!?
-function generateTodos(setDelete){
+function clearTaskLists(){ //Empty list 
+	$("#plannedTasksList").text("");
+	$("#workingTasksList").text("");
+	$("#doneTasksList").text("");
 
-	clearTaskLists(setDelete);//maybe not smartest way to do
 	
-	tasks.forEach(element=>{
-		//console.log(element.name);
-		switch(element.status){
-			case 1:
-				$("#plannedTasksList").append(element.TaskObject);
-				break;
-
-			case 2:
-				$("#workingTasksList").append(element.TaskObject);
-				break;
-
-			case 3:
-				$("#doneTasksList").append(element.TaskObject);
-				break;
-
-			default:
-				console.log("Horror happened on generating objects");
-				break;
-		}
-		
-	});
-
-}
-
-function clearTaskLists(setDelete){
-	if(setDelete==false){
-		$("#plannedTasksList").text("");
-		$("#workingTasksList").text("");
-		$("#doneTasksList").text("");
-	}else{
-		tasks = [];
-		$("#plannedTasksList").text("");
-		$("#workingTasksList").text("");
-		$("#doneTasksList").text("");
-	}
 }
 
 
@@ -208,26 +179,15 @@ $(document).ready(function() {
 //<<--------------------------------------------------------------------------------------->>//
 
 function loadValues(){
-	if(localStorage.length>0){
-		let tmptasks = JSON.parse(localStorage.getItem('tasks') );
-		tmptasks.forEach(element =>{
-			let newTask = new Task(element.id,element.name,element.priority,'',element.status);
-			element.info.forEach(inst =>{
-				newTask.addInfo(inst,false);
-			})
-			tasks.push(newTask);
-		})
-		//console.log(tasks);
-		tmpID		=	localStorage.getItem('id');
-		lastSave 	= 	localStorage.getItem('last');
-	}
-	
+	getDBTasks();
+
 }
 
 function saveValues(){
+	
+	//TODO convert to use indexedDB
 	localStorage.setItem('last',moment().format('MMMM Do YYYY, HH:mm:ss'))
-	localStorage.setItem('id',tmpID);
-	localStorage.setItem('tasks',JSON.stringify(tasks));
+
 }
 
 
@@ -255,7 +215,7 @@ $('#editModal').on('show.bs.modal', function (e) {
  	$("#setTaskLabelModal").text(tasks[openID].name);
  	$("#editTaskName").val(tasks[openID].name);
  	//$("#editPriorty").val(tasks[openID].TaskText);
- 	switch(tasks[openID].getPriority){
+ 	switch(tasks[openID].priority){
  		case 3:
  			$('#editPriorty3').prop('selected',true)
  			$('#editPriorty2').prop('selected',false)
@@ -273,7 +233,12 @@ $('#editModal').on('show.bs.modal', function (e) {
  			break;
  	}
  	$("#addCommentBox").val('');
- 	$("#Comments").html(tasks[openID].GenerateInfoCards());
+ 	
+ 	console.log('Taskid: ' +tasks[openID].id);
+ 	getDBComments(tasks[openID].id);
+ 	
+ 	//TODO Comments
+ 	//$("#Comments").html(tasks[openID].GenerateInfoCards());
 
 });
 $('#editModal').on('shown.bs.modal', function (e) {
@@ -281,7 +246,7 @@ $('#editModal').on('shown.bs.modal', function (e) {
  	modalNumOpen = 2;
 });
 $('#editModal').on('hidden.bs.modal', function (e) {
-	generateTodos(false);
+	loadValues()
 	$('#editTaskName').prop('disabled',true);
 	$('#editPriorty').prop('disabled',true);
  	modalNumOpen = -2;
@@ -292,7 +257,9 @@ $('#editModal').on('hidden.bs.modal', function (e) {
 //<<--------------------------------------------------------------------------------------->>//
 
 window.onload = (event) => {
-	loadValues();
-	generateTodos(false);
+	openDB();
+	
+	//generateTodos(false);
+	
   	console.log('page is fully loaded');
 };
