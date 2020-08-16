@@ -143,10 +143,8 @@ function getDBComments(setTaskId){
 		//console.log(cursor);
 		if(cursor){
 			if(cursor.value.taskId == parseInt(setTaskId,10)){
-				let tmp = cursor.value;
-				tmp.id = cursor.key; //Save key as id
-				results.push(tmp);
-				let comment = new Comment(tmp.id,tmp.taskId,tmp.text,tmp.createTime);
+				results.push(cursor.value);
+				let comment = new Comment(cursor.value.id,cursor.value.taskId,cursor.value.text,cursor.value.createTime);
 				$("#Comments").append(comment.getCommentCard());
 				
 			}
