@@ -57,7 +57,7 @@ function openDB(){
 //<<--------------------------------------------------------------------------------------->>//
 //												Tasks
 //<<--------------------------------------------------------------------------------------->>//
-function addDBTask(setTask,setComment){
+function insertDBTask(setTask,setComment){
 	
 	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
 	let sentObj = taskTable.add(setTask);
@@ -72,53 +72,75 @@ function addDBTask(setTask,setComment){
 			addDBComment(setComment);
 		}
 		finalRes.onsuccess = function(event){
-			getDBTasks();
+			tasks = getDBTasks();
 		}
 		
 	}
 }
 
-function getDBTasks(){
-	let results ;
+function updateDBTask(setTask){
 	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
-	results = taskTable.getAll()
-	results.onsuccess = function(event){
+	let sentobj = taskTable.put(setTask,setTask.id);
+	sentobj.onsuccess = function(event){
+		console.log('Task ' + setTask.id + ' was updated');
+		tasks =getDBTasks();
+	}
+
+}
+
+function deleteDBTask(setTask){
+	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
+	let deleteobj = taskTable.delete(setTask.id);
+}
+
+function getDBTasks(){
+	let results =[] ;
+	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
+	let tmp = taskTable.getAll()
+	tmp.onsuccess = function(event){
+		let tmpTask = tmp.result;
+		tmpTask.forEach(inst=>{
+			let tmpTask = new Task(inst.id,inst.name,inst.priority,inst.status,inst.setTime,inst.StartTime,inst.deadline);
+			results.push(tmpTask);
+		})
 		//console.log('All tasks loadled');
 		//console.log(results);
-		tasks = results.result;
-		generateTodoLists();
-		
+		generateTodoLists(results);
 	}
 	//console.log(results);
 	return results;
 }
 
+
 //Support to generate TodoLists
-function generateTodoLists(){
+function generateTodoLists(setTodoObjects){
 	//console.log(tasks.length);
 	clearTaskLists();
-	if(tasks.length>0){
+	if(setTodoObjects.length>0){
 		//console.log(tasks);
-		tasks.forEach(inst =>{
-			let tmpTask = new Task(inst.id,inst.name,inst.priority,inst.status,inst.setTime,inst.StartTime,inst.deadline);
+		setTodoObjects.forEach(inst =>{
+			
 			//console.log(tmpTask);
-			switch(tmpTask.status){
+			switch(inst.status){
 				case 1:
-					$('#plannedTasksList').append(tmpTask.GenerateTask());
+					$('#plannedTasksList').append(inst.GenerateTask());
 					break;
 					
 				case 2:
-					$('#workingTasksList').append(tmpTask.GenerateTask());
+					$('#workingTasksList').append(inst.GenerateTask());
 					break;
 					
 					
 				case 3:
-					$('#doneTasksList').append(tmpTask.GenerateTask());
+					$('#doneTasksList').append(inst.GenerateTask());
 					break;
 			}
 		});
 	}
 }
+
+
+
 
 //<<--------------------------------------------------------------------------------------->>//
 //												Comments

@@ -1,4 +1,5 @@
 let tasks;
+let activeTask;
 let openID = 0;
 let lastSave = ""
 
@@ -27,7 +28,8 @@ $(document).on('click', ".todoObj", function() {
 	let getID = parseInt(gettmpId[1],10);
 	console.log("ID is:" + getID);
 
-	openID = tasks.findIndex(inst => inst.id==getID ); 
+	openID = tasks.findIndex(inst => inst.id==getID );
+	activeTask = tasks[openID]; 
 	$('#editModal').modal('show');	
     
 });
@@ -76,7 +78,7 @@ function addTask(){
 	
 	newTask.updateSetTime();
 	newComment.updateCreateTime();
-	addDBTask(newTask,newComment);
+	insertDBTask(newTask,newComment);
 	
 	$('#addNewTaskModal').modal('hide');
 	
@@ -85,8 +87,12 @@ function addTask(){
 
 function addComment(){ //Also change name/priority if modified
 	let newComment = new Comment(0,tasks[openID].id,$("#addCommentBox").val(),'');
+	let newTask = new Task(null,$("#editTaskName").val(),$("#editPriorty").val(),1,null,'noStartTime','noDeadline');
 	newComment.updateCreateTime();
-	addDBComment(newComment);
+	if(newComment.text.length > 1){
+		addDBComment(newComment);
+	}
+	
 	
 	tasks[openID].setName = $("#editTaskName").val();
 	tasks[openID].setPriority = $("#editPriorty").val();
@@ -96,32 +102,29 @@ function addComment(){ //Also change name/priority if modified
 
 function updateStatus(){ //Comes when click one object on main desk //TODO: change to use indexedDB
 
-	console.log(openID);
-	let tmpObj = tasks[openID];
+	
 	
 
-	switch(tmpObj.status){
+	switch(activeTask.status){
 		case 1:
-			tmpObj.status = tmpObj.status+1;
-			tasks[openID] = tmpObj;
-			
+			activeTask.status++;
+			updateDBTask(activeTask);
 			
 			break;
 		case 2:
-			tmpObj.status = tmpObj.status+1;
-			tasks[openID] = tmpObj;
-		
+			activeTask.status++;
+			updateDBTask(activeTask);
 				
 			break;
 		case 3:
-			tasks.splice(openID,1);
+			deleteDBTask(activeTask);
 			break;
 
 	}
 	
 	$('#editModal').modal('hide');
 	saveValues();
-	generateTodos(false);
+	
 }
 
 
@@ -179,7 +182,9 @@ $(document).ready(function() {
 //<<--------------------------------------------------------------------------------------->>//
 
 function loadValues(){
-	getDBTasks();
+	tasks = getDBTasks();
+	console.log(tasks);
+	
 
 }
 
@@ -212,10 +217,25 @@ $('#addNewTaskModal').on('hidden.bs.modal', function (e) {
 $('#editModal').on('show.bs.modal', function (e) {
 	$('#editTaskName').prop('disabled',true);
 	$('#editPriorty').prop('disabled',true);
- 	$("#setTaskLabelModal").text(tasks[openID].name);
- 	$("#editTaskName").val(tasks[openID].name);
- 	//$("#editPriorty").val(tasks[openID].TaskText);
- 	switch(tasks[openID].priority){
+ 	$("#setTaskLabelModal").text(activeTask.name);
+ 	$("#editTaskName").val(activeTask.name);
+
+ 	switch(activeTask.status){
+ 		case 1:
+ 			$('#setMoveNextStep').text('Move to Work');
+ 			break;
+
+ 		case 2:
+ 			$('#setMoveNextStep').text('Move to Done');
+ 			break;
+
+ 		case 3:
+ 			$('#setMoveNextStep').text('Delete');
+ 			break;
+ 		
+ 	}
+ 	
+ 	switch(activeTask.priority){
  		case 3:
  			$('#editPriorty3').prop('selected',true)
  			$('#editPriorty2').prop('selected',false)
@@ -234,11 +254,9 @@ $('#editModal').on('show.bs.modal', function (e) {
  	}
  	$("#addCommentBox").val('');
  	
- 	console.log('Taskid: ' +tasks[openID].id);
- 	getDBComments(tasks[openID].id);
+ 	//console.log('Taskid: ' +tasks[openID].id);
+ 	getDBComments(activeTask.id);
  	
- 	//TODO Comments
- 	//$("#Comments").html(tasks[openID].GenerateInfoCards());
 
 });
 $('#editModal').on('shown.bs.modal', function (e) {
