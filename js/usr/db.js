@@ -1,8 +1,10 @@
 const getDBName = "TodoDB";
-const getDBVersion = 1;
+const getDBVersion = 2;
 
 const getTaskTableName = 'Tasks';
 const getCommentsTableName ='Comments';
+const getTasksListsTableName ='TaskLists';
+const getListNameTableName ='ListNames';
 var db;
 
 
@@ -24,10 +26,10 @@ function openDB(){
 	
 	req.onupgradeneeded = function (event) {
 
-	    var db = event.target.result;
+	     db = event.target.result;
 	
 	    // Create another object store called "names" with the autoIncrement flag set as true.    
-	    var objStoreTasks = db.createObjectStore(getTaskTableName, { autoIncrement : true});
+	    let objStoreTasks = db.createObjectStore(getTaskTableName, { autoIncrement : true});
 	    objStoreTasks.createIndex('id','id',{unique: true});
 	    objStoreTasks.createIndex('name','name',{unique: false});
 	    objStoreTasks.createIndex('status','status',{unique: false});
@@ -41,12 +43,19 @@ function openDB(){
 			
 		}
 		
-		var objStoreComments = db.createObjectStore(getCommentsTableName, { autoIncrement : true });
+		let objStoreComments = db.createObjectStore(getCommentsTableName, { autoIncrement : true });
 		objStoreComments.createIndex('id','id',{unique: true});
 	    objStoreComments.createIndex('taskId','taskId',{unique: false});
 	    objStoreComments.createIndex('text','text',{unique: false});
 		objStoreComments.createIndex('createTime','createTime',{unique: false});
-		
+
+		let objStoreTaskList = db.createObjectStore(getTasksListsTableName, {autoIncrement:true});
+		objStoreTaskList.createIndex('id','id',{unique:true});
+		objStoreTaskList.createIndex('taskId','tasld',{unique:false});
+
+		let objStoreListNames = db.createObjectStore(getListNameTableName, {autoIncrement:true});
+		objStoreListNames.createIndex('id','id',{unique:true});
+		objStoreListNames.createIndex('name','name',{unique:false});
 
 		
     };
@@ -81,6 +90,7 @@ function insertDBTask(setTask,setComment){
 function updateDBTask(setTask){
 	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
 	let sentobj = taskTable.put(setTask,setTask.id);
+	console.log('was here');
 	sentobj.onsuccess = function(event){
 		console.log('Task ' + setTask.id + ' was updated');
 		tasks =getDBTasks();

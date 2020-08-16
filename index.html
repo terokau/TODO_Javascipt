@@ -101,8 +101,8 @@
 					<blockquote class="blockquote text-center">
 						Here by I promise to do this task that I assigned it to my self. If i eat my words, Troll may take me.
 					</blockquote>
-					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="clearAddNewTask">Turn around and walk back</button>
-					<button type="button" class="btn btn-primary" id="addNewTask">Understood</button>
+					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="clearAddNewTask">Turn around and walk back</button>
+					<button type="button" class="btn btn-outline-primary" id="addNewTask">Understood</button>
 				</div>
 			</div>
 		</div>
@@ -169,9 +169,12 @@
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary" id="saveComment">Save</button>
-					<button type="button" class="btn btn-primary" id="setMoveNextStep">Move to next step</button>
+					<div class="btn-group w-100" role="group"> 
+						<button type="button" class="btn btn-outline-primary" id="setMoveBackStep">Move to back</button>
+						<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-outline-primary" id="saveComment">Save</button>
+						<button type="button" class="btn btn-outline-primary" id="setMoveNextStep">Move to next</button>
+					</div>
 				</div>
 			</div>
 		</div>

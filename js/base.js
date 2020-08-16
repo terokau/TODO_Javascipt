@@ -1,7 +1,7 @@
 let tasks;
 let activeTask;
 let openID = 0;
-let lastSave = ""
+
 
 let modalNumOpen = -1;
 
@@ -12,7 +12,7 @@ let secondTimer = setInterval(updateTime,1000);
 updateTime(); //To set in on load
 function updateTime(){
 	let timeStr = moment().format('MMMM Do YYYY, HH:mm:ss');
-	$("#setTime").html("Current time: " +timeStr + " <br>Last time saved: " + lastSave);
+	$("#setTime").html("Current time: " +timeStr );
 	//console.log("Tic toc");
 }
 
@@ -47,7 +47,10 @@ $(document).on('click', "#saveComment",function(){
 });
 
 $(document).on('click', "#setMoveNextStep",function(){
-	updateStatus();
+	updateStatus(true);
+});
+$(document).on('click', "#setMoveBackStep",function(){
+	updateStatus(false);
 });
 
 $(document).on('click', "#enableEdit",function(){
@@ -87,25 +90,23 @@ function addTask(){
 
 function addComment(){ //Also change name/priority if modified
 	let newComment = new Comment(0,tasks[openID].id,$("#addCommentBox").val(),'');
-	let newTask = new Task(null,$("#editTaskName").val(),$("#editPriorty").val(),1,null,'noStartTime','noDeadline');
+	
 	newComment.updateCreateTime();
 	if(newComment.text.length > 1){
 		addDBComment(newComment);
 	}
-	
-	
-	tasks[openID].setName = $("#editTaskName").val();
-	tasks[openID].setPriority = $("#editPriorty").val();
+
+	activeTask.name = $("#editTaskName").val();
+	activeTask.priority = $("#editPriorty").val();
+	updateDBTask(activeTask);
 	$('#editModal').modal('hide');
 	
 }
 
-function updateStatus(){ //Comes when click one object on main desk //TODO: change to use indexedDB
+function updateStatus(setDirection){ //Comes when click one object on main desk //TODO: change to use indexedDB
 
-	
-	
-
-	switch(activeTask.status){
+	if(setDirection==true){
+		switch(activeTask.status){
 		case 1:
 			activeTask.status++;
 			updateDBTask(activeTask);
@@ -120,7 +121,26 @@ function updateStatus(){ //Comes when click one object on main desk //TODO: chan
 			deleteDBTask(activeTask);
 			break;
 
+		}
+	}else{
+		switch(activeTask.status){
+		case 1:
+			deleteDBTask(activeTask);
+			break;
+		case 2:
+			activeTask.status--
+			updateDBTask(activeTask);
+				
+			break;
+		case 3:
+			activeTask.status--
+			updateDBTask(activeTask);
+
 	}
+	}
+	
+
+	
 	
 	$('#editModal').modal('hide');
 	saveValues();
@@ -144,13 +164,15 @@ $(document).ready(function() {
   $(window).keydown(function(event){
   	switch(event.key){
   		case 'Enter':
-  			event.preventDefault();
+  			
   			switch(modalNumOpen){
   				case 1:
+  					event.preventDefault();
   					addTask();
   					break;
 
   				case 2:
+  					event.preventDefault();
   					addComment();
   					break;
 
@@ -222,14 +244,17 @@ $('#editModal').on('show.bs.modal', function (e) {
 
  	switch(activeTask.status){
  		case 1:
+ 			$('#setMoveBackStep').text('Delete');
  			$('#setMoveNextStep').text('Move to Work');
  			break;
 
  		case 2:
+ 			$('#setMoveBackStep').text('Move to Not yet');
  			$('#setMoveNextStep').text('Move to Done');
  			break;
 
  		case 3:
+ 			$('#setMoveBackStep').text('Move to Work');
  			$('#setMoveNextStep').text('Delete');
  			break;
  		
