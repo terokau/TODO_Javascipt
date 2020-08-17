@@ -5,10 +5,27 @@
 		<link rel="stylesheet" href="css/bootstrap/bootstrap.css">
 		<link rel="stylesheet" href="css/custom.css">
 	</head>
-	<body>
+	<body> 
+		<div class="container-fluid" id="nav">
+			<ul class="nav nav-tabs">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Todo Lists</a>
+					<div class="dropdown-menu">
+						<span id="dropdownLists">
+							<a class="dropdown-item btnTodoListSelect" href="#">Example list</a>
+							<a class="dropdown-item btnTodoListSelect" href="#">Example list</a>
+							<a class="dropdown-item btnTodoListSelect" href="#">Example list</a>
+						
+						</span>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item btnTodoEditLists" href="#">Edit Lists</a>
+					</div>
+				</li>
+			</ul>
+		</div>
 		<div class="container-fluid" id="main">
-			<div class="container-fluid" id="header">
-				<div class="jumbotron">
+			<div class="container-fluid w-100" id="header">
+				<div class="jumbotron w-100">
 					<h1 class="display-3"><span class="red">Todo</span> - <span class="green">Today</span></h1>
 					<p class="lead" id="setTime"></p>
 				</div>
@@ -180,19 +197,59 @@
 		</div>
 	</div>
 
+	<!-- Modal to edit lists -->
+	<div class="modal fade" id="modalEditTodoLists" tabindex="-1" aria-labelledby="modalEditTodoLists" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="col-9">
+						<h5 class="modal-title">Edit Todo Lists</h5>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col">
+							<form>
+								<div class="form-group">
+									<label for="inputAddTodoListName">Add new Todo list. Set name of new List</label>
+									<input type="text" class="form-control" name="inputAddTodoListName" id="inputAddTodoListName">
+									
+								</div>
+								<div class="form-group">
+									<button type="button" class="btn btn-outline-primary" id="btnAddNewTodoListItem">Save</button>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group w-100" role="group"> 
+						
+						<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+						
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 
 	<!-- Script -->
 
 	
 	<!-- Collections -->
 	<script type="text/javascript" src="js/r/jquery.js"></script>
-	<script type="text/javascript" src="js/r/popper.js"></script>
+	<script type="text/javascript" src="js/r/popper.min.js"></script>
 	<script type="text/javascript" src="js/r/moment.js"></script>
 	<script type="text/javascript" src="js/r/bootstrap.js"></script>
 	
 	<!-- Classes-->
 	<script type="text/javascript" src="js/usr/taskClass.js"></script>
 	<script type="text/javascript" src="js/usr/commentClass.js"></script>
+	<script type="text/javascript" src="js/usr/ListNameClass.js"></script>
 	<!-- Database --> 
 	<script type="text/javascript" src="js/usr/db.js"></script>
 	<!-- Main scritpts -->

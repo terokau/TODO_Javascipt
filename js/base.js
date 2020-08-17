@@ -70,9 +70,35 @@ $('#setTaskName').focusout(function(){
 	
 });
 
+$(document).on('click' , '.btnTodoListSelect', function(){
+	alert("selection fired");
+});
+
+$(document).on('click', '.btnTodoEditLists', function(){
+	//alert('Open modal Edit lists');
+	$('#modalEditTodoLists').modal('show');
+});
+
+$(document).on('click', '#btnAddNewTodoListItem', function(){
+	addListName()
+});
+
+
 //<<--------------------------------------------------------------------------------------->>//
 //												Support functions
 //<<--------------------------------------------------------------------------------------->>//
+
+function addListName(){
+	let tmpItem = $('#inputAddTodoListName').val();
+	if(tmpItem.length>3){
+		let newName = new ListName(0,tmpItem);
+		addDBListName(newName);
+	}else{
+		alert("Should be longer than 3 letters long name");
+	}
+	$('#inputAddTodoListName').val('');
+	$('#modalEditTodoLists').modal('hide');
+}
 
 function addTask(){
 	
@@ -205,6 +231,7 @@ $(document).ready(function() {
 
 function loadValues(){
 	tasks = getDBTasks();
+	getDBListNames();
 	console.log(tasks);
 	
 
@@ -294,6 +321,15 @@ $('#editModal').on('hidden.bs.modal', function (e) {
 	$('#editPriorty').prop('disabled',true);
  	modalNumOpen = -2;
 });
+
+//Modal edit list names
+
+$('#modalEditTodoLists').on('shown.bs.modal', function (e) {
+	document.getElementById("inputAddTodoListName").focus();
+	modalNumOpen = 3;
+});
+
+
 
 //<<--------------------------------------------------------------------------------------->>//
 //												Page load

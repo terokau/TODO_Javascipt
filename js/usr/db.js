@@ -188,3 +188,52 @@ function getDBComments(setTaskId){
 	//console.log(results);
 	return results;
 }
+
+//<<--------------------------------------------------------------------------------------->>//
+//												TaskLists
+//<<--------------------------------------------------------------------------------------->>//
+
+function addDBListName(setName){
+	console.log(setName);
+	let listNameTable = db.transaction(getListNameTableName, 'readwrite').objectStore(getListNameTableName);
+	let tmp = listNameTable.add(setName);
+	tmp.onsuccess = function(event){
+		setName.id = tmp.result;
+		let finalRes = listNameTable.put(setName,setName.id);
+		finalRes.onsuccess = function(event){
+			console.log("finalß");
+			getDBListNames();
+		}
+
+	}
+}
+
+function getDBListNames(){
+	let results = [];
+	let listNameTable = db.transaction(getListNameTableName, 'readwrite').objectStore(getListNameTableName);
+	let tmp = listNameTable.getAll();
+	tmp.onsuccess = function(event){
+		let tmpNames = tmp.result;
+		tmpNames.forEach(inst=>{
+			let tmpObj = new ListName(inst.id,inst.name);
+
+			results.push(tmpObj);
+			
+			
+		});
+
+		generateListNames(results);
+	}
+}
+
+function generateListNames(setListNames){
+	$('#dropdownLists').html('');
+	setListNames.forEach(inst=>{
+		$('#dropdownLists').append(inst.generateMenuObject());
+	});
+
+}
+
+
+
+
