@@ -202,6 +202,11 @@ $(document).ready(function() {
   					addComment();
   					break;
 
+  				case 3:
+  					event.preventDefault();
+  					addListName();
+  					break;
+
 
   				default:
   					$('#addNewTaskModal').modal('show');
@@ -328,7 +333,10 @@ $('#modalEditTodoLists').on('shown.bs.modal', function (e) {
 	document.getElementById("inputAddTodoListName").focus();
 	modalNumOpen = 3;
 });
-
+$('#modalEditTodoLists').on('hidden.bs.modal', function (e) {
+	
+	modalNumOpen = -3;
+});
 
 
 //<<--------------------------------------------------------------------------------------->>//
