@@ -74,18 +74,18 @@ function insertDBTask(setTask,setComment,setListId){
 	sentObj.onsuccess = function(event){
 		
 		setTask.id = sentObj.result;
-		let finalRes = taskTable.put(setTask,setTask.id);
+		let finalRes = taskTable.put(setTask,setTask.id); //update id to be same as key
 		writeDeBug("setTask id",setTask.id);
 		writeDeBug("setListId", setListId);
 		addTaskListConnection(setTask.id,setListId);
 		
-		//TODO Comments add
+		//Add comment
 		if(setComment.text.length > 0){
 			setComment.taskId = setTask.id;
 			addDBComment(setComment);
 		}
 		finalRes.onsuccess = function(event){
-			tasks = getDBTasks(setListId);
+			getDBTasks(setListId);
 		}
 		
 	}
@@ -97,7 +97,7 @@ function updateDBTask(setTask,setListId){
 	
 	sentobj.onsuccess = function(event){
 		
-		tasks =getDBTasks(setListId);
+		getDBTasks(setListId);
 	}
 
 }
@@ -139,7 +139,7 @@ function getListDBTasks(setList){
 	let results =[] ;
 	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
 	let tmp = taskTable.getAll()
-	tmp.onsuccess = function(event){
+	tmp.onsuccess = function(event){ //Todo find new better way to find matching than this. slow
 		let tmpTask = tmp.result;
 		tmpTask.forEach(inst=>{
 			setList.forEach(i=>{
