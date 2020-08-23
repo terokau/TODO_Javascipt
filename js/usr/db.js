@@ -72,7 +72,7 @@ function insertDBTask(setTask,setComment,setListId){
 	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
 	let sentObj = taskTable.add(setTask);
 	sentObj.onsuccess = function(event){
-		//console.log(sentObj);
+		
 		setTask.id = sentObj.result;
 		let finalRes = taskTable.put(setTask,setTask.id);
 		writeDeBug("setTask id",setTask.id);
@@ -94,9 +94,9 @@ function insertDBTask(setTask,setComment,setListId){
 function updateDBTask(setTask,setListId){
 	let taskTable = db.transaction(getTaskTableName,'readwrite').objectStore(getTaskTableName);
 	let sentobj = taskTable.put(setTask,setTask.id);
-	//console.log('was here');
+	
 	sentobj.onsuccess = function(event){
-		//console.log('Task ' + setTask.id + ' was updated');
+		
 		tasks =getDBTasks(setListId);
 	}
 
@@ -116,9 +116,6 @@ function getDBTasks(setListId){
 		getTaskListConnections(setListId);
 	}
 	
-	
-	////console.log(results);
-	
 }
 
 function getAllDBTasks(){
@@ -131,8 +128,7 @@ function getAllDBTasks(){
 			let tmpTask = new Task(inst.id,inst.name,inst.priority,inst.status,inst.setTime,inst.StartTime,inst.deadline);
 			results.push(tmpTask);
 		})
-		////console.log('All tasks loadled');
-		////console.log(results);
+		
 		tasks = results;
 		generateTodoLists(results);
 		return results;
@@ -147,7 +143,7 @@ function getListDBTasks(setList){
 		let tmpTask = tmp.result;
 		tmpTask.forEach(inst=>{
 			setList.forEach(i=>{
-				//console.log(i);
+				
 				if(i.taskId == inst.id){
 					let tmpTask = new Task(inst.id,inst.name,inst.priority,inst.status,inst.setTime,inst.StartTime,inst.deadline);
 					results.push(tmpTask);
@@ -155,8 +151,6 @@ function getListDBTasks(setList){
 			})
 			
 		})
-		////console.log('All tasks loadled');
-		////console.log(results);
 		tasks = results;
 		generateTodoLists(results);
 		return results;
@@ -166,13 +160,10 @@ function getListDBTasks(setList){
 
 //Support to generate TodoLists
 function generateTodoLists(setTodoObjects){
-	////console.log(tasks.length);
 	clearTaskLists();
 	if(setTodoObjects.length>0){
-		////console.log(tasks);
 		setTodoObjects.forEach(inst =>{
-			
-			////console.log(tmpTask);
+
 			switch(inst.status){
 				case 1:
 					$('#plannedTasksList').append(inst.GenerateTask());
@@ -199,7 +190,7 @@ function generateTodoLists(setTodoObjects){
 //<<--------------------------------------------------------------------------------------->>//
 function addDBComment(setComment){
 	let commentTable = db.transaction(getCommentsTableName,'readwrite').objectStore(getCommentsTableName);
-	//console.log("Add Comment: " + setComment);
+	
 	let tmp = commentTable.add(setComment);
 	tmp.onsuccess = function(event){
 		setComment.id = tmp.result;
@@ -214,7 +205,7 @@ function getDBComments(setTaskId){
 	let rndobj = commentTable.openCursor();
 	rndobj.onsuccess = function(event){
 		let cursor = event.target.result;
-		////console.log(cursor);
+		
 		if(cursor){
 			if(cursor.value.taskId == parseInt(setTaskId,10)){
 				results.push(cursor.value);
@@ -224,10 +215,9 @@ function getDBComments(setTaskId){
 			}
 			cursor.continue();
 		}else{
-			//console.log('readed all comments');
+			
 		}
 	}
-	////console.log(results);
 	return results;
 }
 
@@ -236,14 +226,14 @@ function getDBComments(setTaskId){
 //<<--------------------------------------------------------------------------------------->>//
 
 function addDBListName(setName){
-	//console.log(setName);
+	
 	let listNameTable = db.transaction(getListNameTableName, 'readwrite').objectStore(getListNameTableName);
 	let tmp = listNameTable.add(setName);
 	tmp.onsuccess = function(event){
 		setName.id = tmp.result;
 		let finalRes = listNameTable.put(setName,setName.id);
 		finalRes.onsuccess = function(event){
-			//console.log("finalß");
+			
 			getDBListNames();
 		}
 
@@ -274,8 +264,6 @@ function deleteDBListName(setid){
 	let listNameTable = db.transaction(getListNameTableName, 'readwrite').objectStore(getListNameTableName);
 	let tmp = listNameTable.delete(parseInt(setid,10));
 	tmp.onsuccess = function(event){
-		console.log("Deleted " + setid);
-		console.log(tmp);
 		activeList = -1;
 		$('#taskListName').text('All tasks');
 		loadValues();
@@ -302,7 +290,6 @@ function addTaskListConnection(setTaskId,setListId){
 	writeDeBug('TaskList Object',setObj);
 	let tmp = taskListsTable.add(setObj);
 	tmp.onsuccess = function(event){
-		//console.log(tmp);
 	}
 }
 
@@ -318,7 +305,6 @@ function getTaskListConnections(setListId){
 			
 		});
 		getListDBTasks(results);
-		console.log(results);
 		return results;
 		//Get Tasks assigend to this taskID
 	}
