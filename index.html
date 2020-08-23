@@ -5,9 +5,9 @@
 		<link rel="stylesheet" href="css/bootstrap/bootstrap.css">
 		<link rel="stylesheet" href="css/custom.css">
 	</head>
-	<body> 
-		<div class="container-fluid" id="nav">
-			<ul class="nav nav-tabs">
+	<body class="bg-transparent"> 
+		<div class="container-fluid mb-4 navCSS">
+			<ul class="nav text-dark w-100">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Todo Lists</a>
 					<div class="dropdown-menu">
@@ -18,30 +18,27 @@
 						
 						</span>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item btnTodoEditLists" href="#">Edit Lists</a>
+						<a class="dropdown-item btnTodoEditLists text-dark" href="#">Edit Lists</a>
 					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link"href="#" id="showAddModal">add new task</a>
 				</li>
 			</ul>
 		</div>
-		<div class="container-fluid" id="main">
-			<div class="container-fluid w-100" id="header">
-				<div class="jumbotron w-100">
-					<h1 class="display-3"><span class="red">Todo</span> - <span class="green">Today</span></h1>
-					<p class="lead" id="setTime"></p>
-				</div>
-			</div> <!-- End of Header -->
+		<div class="container-fluid bg-transparent" id="main">
+			<div class="container-fluid justify-content-center">
+				<h1 class="display-4 header" id="taskListName">All tasks</h1>
+				<span class="lead subHeader" id="setTime"></span>
+				
+			</div>
 
-			<div id="app" class="container-fluid">
-				<div class="row">
-					<div class="col">
+			<div id="app" class="container-fluid bg-transparent">
+				<div class="row bg-transparent my-3">
+					<div class="col-lg bg-transparent my-3">
 						<div class="card" id="plannedTasks">
-								<div class="card-header">
-								<h1 class="display-4 red justify-content-center">Not yet
-								<!-- Button trigger modal -->
-								<button type="button" class="btn btn-primary" id="showAddModal">
-									Add
-								</button>
-								</h1>
+							<div class="card-header">
+								<h1 class="display-4 ListHeader">To Do</h1>
 							</div>
 							<ul class="list-group list-group-flush" id="plannedTasksList">
 								
@@ -51,10 +48,10 @@
 
 					</div>
 
-					<div class="col">
+					<div class="col-lg bg-transparent my-3">
 						<div class="card" id="workingTasks">
 							<div class="card-header">
-								<h1 class="display-4 orange">Keep on working</h1>
+								<h1 class="display-4 ListHeader">Working</h1>
 							</div>
 							<ul class="list-group list-group-flush" id="workingTasksList">
 								
@@ -63,11 +60,11 @@
 						
 					</div>
 
-					<div class="col">
+					<div class="col-lg bg-transparent my-3 ">
 
 						<div class="card" id="doneTasks">
 							<div class="card-header">
-								<h1 class="display-4 green">Party List</h1>
+								<h1 class="display-4 ListHeader">Completed</h1>
 							</div>
 							<ul class="list-group list-group-flush" id="doneTasksList">
 								
@@ -84,7 +81,7 @@
 
 	<!-- Modal -->
 	<div class="modal fade" id="addNewTaskModal"  data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="staticBackdropLabel">Add new task</h5>
@@ -118,8 +115,8 @@
 					<blockquote class="blockquote text-center">
 						Here by I promise to do this task that I assigned it to my self. If i eat my words, Troll may take me.
 					</blockquote>
-					<button type="button" class="btn btn-outline-secondary" data-dismiss="modal" id="clearAddNewTask">Turn around and walk back</button>
-					<button type="button" class="btn btn-outline-primary" id="addNewTask">Understood</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal" id="clearAddNewTask">Turn around and walk back</button>
+					<button type="button" class="btn btn-primary" id="addNewTask">Understood</button>
 				</div>
 			</div>
 		</div>
@@ -127,7 +124,7 @@
 
 	<!-- Move to working modal -->
 	<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="MoveToNext" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<div class="col-9">
@@ -187,10 +184,10 @@
 				</div>
 				<div class="modal-footer">
 					<div class="btn-group w-100" role="group"> 
-						<button type="button" class="btn btn-outline-primary" id="setMoveBackStep">Move to back</button>
-						<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-outline-primary" id="saveComment">Save</button>
-						<button type="button" class="btn btn-outline-primary" id="setMoveNextStep">Move to next</button>
+						<button type="button" class="btn btn-primary" id="setMoveBackStep">Move to back</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary" id="saveComment">Save</button>
+						<button type="button" class="btn btn-primary" id="setMoveNextStep">Move to next</button>
 					</div>
 				</div>
 			</div>
@@ -199,7 +196,7 @@
 
 	<!-- Modal to edit lists -->
 	<div class="modal fade" id="modalEditTodoLists" tabindex="-1" aria-labelledby="modalEditTodoLists" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<div class="col-9">
@@ -216,7 +213,7 @@
 									
 								</div>
 								<div class="form-group">
-									<button type="button" class="btn btn-outline-primary" id="btnAddNewTodoListItem">Save</button>
+									<button type="button" class="btn btn-primary" id="btnAddNewTodoListItem">Save</button>
 								</div>
 
 							</form>
@@ -227,10 +224,10 @@
 						<div class="col">
 							<div class="card">
 								<div class="card-header">
-									<p> Edit todo lists </p>
+									<p> Delete Todo lists</p>
 								</div>
 
-								<div class="card-body">
+								<div class="card-body" id="editListNames">
 									TODO : Here will be list boxß
 								</div>
 							</div>
@@ -243,12 +240,37 @@
 				<div class="modal-footer">
 					<div class="btn-group w-100" role="group"> 
 						
-						<button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<!-- modal to delete -->
+	<div class="modal fade" id="modalDeleteTodoList" tabindex="-1" aria-labelledby="modalDeleteTodoList" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="col-9">
+						<h5 class="modal-title">Delete List</h5>
+					</div>
+				</div>
+				<div class="modal-body">
+						<p> Are you sure to delete?</p>
+				</div>
+				<div class="modal-footer">
+					<div class="btn-group w-100" role="group"> 
+						
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-danger" id="btnDeleteTodoList">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 
 
 

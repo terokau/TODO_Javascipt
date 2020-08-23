@@ -1,3 +1,17 @@
+:root{
+	--MainDark : ##00363a ;
+	--MainPrimary: #006064 ;
+	--MainLight: #428e92;
+
+	--SecondaryDark:#004c40;
+	--SecondaryPrimary:#00796b;
+	--SecondaryLight:#48a999;
+
+	--backgroundColor:#f5f5f5;
+
+	--HighLight: #f44336;
+};
+
 .green{
 	color: #32a643;
 }
@@ -6,19 +20,100 @@
 	color: #e01044;
 }
 
-.orange{
-	color: #ff7b00;
+.Orange{
+	color: var(--HighLight);
 }
 
 .highPriority{
 	color:white;
-	background-color: #e01044;
+	background-color: var(--SecondaryDark);
 }
 .normalPriority{
 	color:white;
-	background-color: #52a4e3;
+	background-color: var(--SecondaryPrimary);
 }
 .lowPriority{
 	color:black;
-	background-color: #b3f5c3;
+	background-color: var(--SecondaryLight);
+
+;
+}
+
+html { 
+ 	background-color: var(--backgroundColor);
+ 	font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
+}
+
+
+.navCSS{
+	background-color: var(--MainPrimary);
+}
+
+.nav-link{
+	color: white;
+}
+
+.nav-link.active{
+	color: white;
+}
+
+
+.header{
+	color: black;
+}
+
+.subHeader{
+	color: black;
+	font-size: 2em;
+	font-
+}
+
+.card{
+	border-color: black;
+	background-color: var(--MainLight);
+}
+.card-header{
+	background-color: var(--MainLight);
+	font-size: 1.5em;
+	text-align: center;
+}
+
+
+.ListHeader{
+	background-color: var(--MainLight);
+	color: black;
+	font-size: 2em;
+}
+
+.card-body{
+	color: black;
+	background-color: var(--SecondaryLight);
+}
+
+
+.modal-header{
+	background-color: var(--MainLight);
+	color: black;
+	border-color: black;
+
+}
+
+.modal-footer{
+	background-color: var(--MainLight);
+	color: black;
+	border-color: black;
+}
+
+.modal-body{
+	background-color: var(--backgroundColor);
+	color:black;
+	border-color: black;
+}
+.listName{
+	background-color: var(--SecondaryPrimary);
+	color: white;
+}
+
+a{
+	color: black;
 }

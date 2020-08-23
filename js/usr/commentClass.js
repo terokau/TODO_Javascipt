@@ -37,7 +37,7 @@ class Comment{
 //<<--------------------------------------------------------------------------------------->>//	
 	getCommentCard(){
 		//console.log('Generating comment card');
-		return '<div class="row"><div class="card w-100 TaskComment" id=taskComment_"'+this.id+'"><div class="card-body">'+this.text+' - [' +this.createTime+ ']</div></div></div>';
+		return '<div class="row"><div class="card w-100 TaskComment" id=taskComment_"'+this.id+'"><div class="card-body commentCSS">'+this.text+' - [' +this.createTime+ ']</div></div></div>';
 
 	}//End of getCommentCard()
 	

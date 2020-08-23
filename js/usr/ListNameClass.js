@@ -42,4 +42,8 @@ class ListName{
 		return '<a class="dropdown-item btnTodoListSelect" id="todoListName_'+this.id+'" href="#">'+this.name+'</a>'
 	}
 
+	generateListEditorObject(){
+		return '<div class="row"><div class="card w-100 btnDeleteList " id="listName_'+parseInt(this.id,10)+'"><div class="card-body listName">'+this.name+'</div></div></div>'
+	}
+
 }

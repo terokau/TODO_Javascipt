@@ -1,6 +1,8 @@
 let tasks;
 let activeTask;
 let openID = 0;
+let activeList = -1; //-1 is all, Rest is based on list
+let deleteListNum = -1;
 
 
 let modalNumOpen = -1;
@@ -11,8 +13,9 @@ clearTaskLists(false);
 let secondTimer = setInterval(updateTime,1000);
 updateTime(); //To set in on load
 function updateTime(){
-	let timeStr = moment().format('MMMM Do YYYY, HH:mm:ss');
-	$("#setTime").html("Current time: " +timeStr );
+	let timeStr = moment().format('MMMM Do YYYY, ');
+	let second = "<span class='Orange'>" + moment().format('HH:mm:ss')+"</span>";
+	$("#setTime").html( timeStr +second);
 	//console.log("Tic toc");
 }
 
@@ -71,7 +74,12 @@ $('#setTaskName').focusout(function(){
 });
 
 $(document).on('click' , '.btnTodoListSelect', function(){
-	alert("selection fired");
+	let listId = $(this).attr('id').split("_");
+	$('#taskListName').text($(this).text());
+	activeList = parseInt(listId[1],10);
+	console.log("Selected active list: "  + activeList);
+	//alert("selection fired" + activeList);
+	loadValues();
 });
 
 $(document).on('click', '.btnTodoEditLists', function(){
@@ -81,6 +89,25 @@ $(document).on('click', '.btnTodoEditLists', function(){
 
 $(document).on('click', '#btnAddNewTodoListItem', function(){
 	addListName()
+});
+
+$(document).on('click', '.btnDeleteList', function(){
+	let listId = $(this).attr('id').split("_");
+	
+	deleteListNum = listId[1];
+	console.log("Selected active list: "  + parseInt(deleteListNum) + " whee "+listId[1]);
+	if(deleteListNum>-1){
+		$('#modalEditTodoLists').modal('hide');
+		$('#modalDeleteTodoList').modal('show');
+
+	}
+});
+
+$(document).on('click', '#btnDeleteTodoList', function(){
+	deleteDBListName(deleteListNum);
+	
+	
+	$('#modalDeleteTodoList').modal('hide');
 });
 
 
@@ -107,7 +134,7 @@ function addTask(){
 	
 	newTask.updateSetTime();
 	newComment.updateCreateTime();
-	insertDBTask(newTask,newComment);
+	insertDBTask(newTask,newComment,activeList);
 	
 	$('#addNewTaskModal').modal('hide');
 	
@@ -135,32 +162,32 @@ function updateStatus(setDirection){ //Comes when click one object on main desk 
 		switch(activeTask.status){
 		case 1:
 			activeTask.status++;
-			updateDBTask(activeTask);
+			updateDBTask(activeTask,activeList);
 			
 			break;
 		case 2:
 			activeTask.status++;
-			updateDBTask(activeTask);
+			updateDBTask(activeTask,activeList);
 				
 			break;
 		case 3:
-			deleteDBTask(activeTask);
+			deleteDBTask(activeTask,activeList);
 			break;
 
 		}
 	}else{
 		switch(activeTask.status){
 		case 1:
-			deleteDBTask(activeTask);
+			deleteDBTask(activeTask),activeList;
 			break;
 		case 2:
 			activeTask.status--
-			updateDBTask(activeTask);
+			updateDBTask(activeTask,activeList);
 				
 			break;
 		case 3:
 			activeTask.status--
-			updateDBTask(activeTask);
+			updateDBTask(activeTask,activeList);
 
 	}
 	}
@@ -235,9 +262,9 @@ $(document).ready(function() {
 //<<--------------------------------------------------------------------------------------->>//
 
 function loadValues(){
-	tasks = getDBTasks();
+	getDBTasks(activeList);
 	getDBListNames();
-	console.log(tasks);
+	//console.log(tasks);
 	
 
 }
